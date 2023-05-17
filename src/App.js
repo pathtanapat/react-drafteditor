@@ -1,45 +1,18 @@
 // import logo from './logo.svg';
 import './App.css';
-import { useState, createRef, useMemo, useEffect, useRef } from 'react'
-import {dynamic} from 'next/dynamic'
-import { EditorState, convertToRaw, ContentState } from 'draft-js'
-import { EditorProps } from 'react-draft-wysiwyg'
+import { useState } from 'react'
+import { EditorState, convertToRaw, ContentState} from 'draft-js'
+import { Editor } from 'react-draft-wysiwyg'
 import draftToHtml from 'draftjs-to-html'
-import styled from 'styled-components'
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
 
 /* eslint-disable */
 const htmlToDraft =
   typeof window === 'object' && require('html-to-draftjs').default
 
-const Editor = dynamic<EditorProps>(
-  () => import('react-draft-wysiwyg').then(mod => mod.Editor),
-  { ssr: false }
-)
-
 function App() {
-  const openPageFirstTime = useRef(true)
   const [editorState, setEditorState] = useState(EditorState.createEmpty())
-  const [showEditorCode, setShowEditorCode] = useState(false)
   const [editorHTML, setEditorHTML] = useState('')
-
-  useEffect(() => {
-    if (openPageFirstTime.current && value) {
-      const contentBlock = htmlToDraft(value)
-      let editor
-      if (contentBlock) {
-        const contentState = ContentState.createFromBlockArray(
-          contentBlock.contentBlocks
-        )
-        editor = EditorState.createWithContent(contentState)
-      } else {
-        editor = EditorState.createEmpty()
-      }
-      setEditorHTML(unescape(value))
-      setEditorState(editor)
-      openPageFirstTime.current = false
-    }
-  }, [value, openPageFirstTime.current])
 
   const unescape = (escaped) => {
     return escaped
@@ -54,7 +27,8 @@ function App() {
     setEditorState(contentState)
     let html = draftToHtml(convertToRaw(contentState.getCurrentContent()))
     setEditorHTML(unescape(html))
-    onChangeController(unescape(html))
+    // // store value to react-hook-form
+    // onChangeController(unescape(html))
   }
 
   const onEditEditorHTML = (e) => {
@@ -69,35 +43,18 @@ function App() {
     } else {
       editor = EditorState.createEmpty()
     }
+
+    // onchange(editorHTML)
     setEditorHTML(_editorHTML)
     setEditorState(editor)
+    // store value to react-hook-form
     onChangeController(_editorHTML)
   }
 
-  const convertHTMLtoBlock = () => {
-    if (html) {
-      const blocksFromHtml = htmlToDraft(html)
-      setEditorHTML(html)
-      const { contentBlocks, entityMap } = blocksFromHtml
-      const contentState = ContentState.createFromBlockArray(
-        contentBlocks,
-        entityMap
-      )
-      setEditorState(EditorState.createWithContent(contentState))
-    }
-  }
-
-  useMemo(() => {
-    convertHTMLtoBlock()
-  }, [html])
-
-  const toggleEditorCode = () => {
-    setShowEditorCode(!showEditorCode)
-  }
-
   return (
-    <div>
-      <Editor
+    <>
+    <div className="border border-pcgLightGrey">
+            <Editor
               toolbar={{
                 options: [
                   'inline',
@@ -113,7 +70,6 @@ function App() {
                   'history',
                 ],
                 image: {
-                  // uploadCallback: uploadCallback,
                   previewImage: true,
                   alt: { present: true, mandatory: false },
                   inputAccept: 'image/gif,image/jpeg,image/jpg,image/png',
@@ -143,25 +99,20 @@ function App() {
               wrapperClassName="text-editor-wrapper pb-5"
               editorClassName="mx-3 mt-5 min-h-[200px] bg-white"
               onEditorStateChange={onEditorStateChange}
-              readOnly={readOnly}
             />
-    </div>
-    // <div className="App">
-    //   <header className="App-header">
-    //     <img src={logo} className="App-logo" alt="logo" />
-    //     <p>
-    //       Edit <code>src/App.js</code> and save to reload.
-    //     </p>
-    //     <a
-    //       className="App-link"
-    //       href="https://reactjs.org"
-    //       target="_blank"
-    //       rel="noopener noreferrer"
-    //     >
-    //       Learn React
-    //     </a>
-    //   </header>
-    // </div>
+       
+            <div className="w-full px-3 pt-5 pb-3 h-[120px]">
+              <textarea
+                className="w-full h-[272px] focus:outline-0"
+                // // @ts-ignore
+                // ref={textareaEditor}
+                value={editorHTML}
+                onChange={onEditEditorHTML}
+                placeholder="Code Editor"
+              />
+            </div>
+        </div>
+    </>
   );
 }
 
