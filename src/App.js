@@ -55,6 +55,7 @@ function App() {
     <>
     <div className="border border-pcgLightGrey">
             <Editor
+            // handle toolber for enable/disable
               toolbar={{
                 options: [
                   'inline',
