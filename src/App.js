@@ -61,13 +61,13 @@ function App() {
                   'blockType',
                   'fontSize',
                   'list',
-                  'textAlign',
-                  'colorPicker',
-                  'link',
-                  'emoji',
-                  'image',
-                  'remove',
-                  'history',
+                  // 'textAlign',
+                  // 'colorPicker',
+                  // 'link',
+                  // 'emoji',
+                  // 'image',
+                  // 'remove',
+                  // 'history',
                 ],
                 image: {
                   previewImage: true,
@@ -100,7 +100,6 @@ function App() {
               editorClassName="mx-3 mt-5 min-h-[200px] bg-white"
               onEditorStateChange={onEditorStateChange}
             />
-       
             <div className="w-full px-3 pt-5 pb-3 h-[120px]">
               <textarea
                 className="w-full h-[272px] focus:outline-0"
