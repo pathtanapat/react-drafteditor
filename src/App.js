@@ -27,8 +27,6 @@ function App() {
     setEditorState(contentState)
     let html = draftToHtml(convertToRaw(contentState.getCurrentContent()))
     setEditorHTML(unescape(html))
-    // // store value to react-hook-form
-    // onChangeController(unescape(html))
   }
 
   const onEditEditorHTML = (e) => {
@@ -47,28 +45,18 @@ function App() {
     // onchange(editorHTML)
     setEditorHTML(_editorHTML)
     setEditorState(editor)
-    // store value to react-hook-form
-    onChangeController(_editorHTML)
   }
 
   return (
     <>
     <div className="border border-pcgLightGrey">
             <Editor
-            // handle toolber for enable/disable
               toolbar={{
                 options: [
                   'inline',
-                  'blockType',
-                  'fontSize',
+                  'textAlign',
                   'list',
-                  // 'textAlign',
-                  // 'colorPicker',
-                  // 'link',
-                  // 'emoji',
-                  // 'image',
-                  // 'remove',
-                  // 'history',
+                  'history',
                 ],
                 image: {
                   previewImage: true,
@@ -76,24 +64,10 @@ function App() {
                   inputAccept: 'image/gif,image/jpeg,image/jpg,image/png',
                 },
                 inline: {
-                  options: ['bold', 'italic', 'underline', 'strikethrough'],
+                  options: ['bold', 'italic', 'underline'],
                 },
-                colorPicker: {
-                  colors: [
-                    '#415A87',
-                    '#B2861A',
-                    '#EECE80',
-                    '#ECCB1D',
-                    '#555555',
-                    '#7B7B7B',
-                    '#D9D9D9',
-                    '#F9F9F9',
-                    '#EC5254',
-                    '#4CB080',
-                    '#1C3259',
-                    '#FFFFFF',
-                    '#000000',
-                  ],
+                list: {
+                  options: ['unordered', 'ordered'],
                 },
               }}
               editorState={editorState}
@@ -104,8 +78,6 @@ function App() {
             <div className="w-full px-3 pt-5 pb-3 h-[120px]">
               <textarea
                 className="w-full h-[272px] focus:outline-0"
-                // // @ts-ignore
-                // ref={textareaEditor}
                 value={editorHTML}
                 onChange={onEditEditorHTML}
                 placeholder="Code Editor"
